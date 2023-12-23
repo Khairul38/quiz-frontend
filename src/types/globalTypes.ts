@@ -1,15 +1,21 @@
+export interface IAuthUser {
+  id?: string;
+  name: string;
+  email: string;
+  role: string;
+  iat: number;
+  exp: number;
+}
 export interface IUser {
   id?: string;
   name: string;
   email: string;
   role: string;
-  contactNo?: string;
-  address?: string;
-  profileImg?: string;
-  iat?: number;
-  exp?: number;
-  createdAt?: string;
-  updatedAt?: string;
+  contactNo: string;
+  address: string;
+  profileImg: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ICategory {

@@ -11,7 +11,7 @@ Please follow the below instructions to run this repository on your local machin
 1. Clone this entire repository
 
    ```sh
-   git clone 
+   git clone https://github.com/Khairul38/quiz-frontend
    ```
 
 2. Go to the cloned project directory

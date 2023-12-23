@@ -1,10 +1,10 @@
-import { IUser } from "@/types/globalTypes";
+import { IAuthUser } from "@/types/globalTypes";
 import { createSlice } from "@reduxjs/toolkit";
 import { jwtDecode } from "jwt-decode";
 
 export interface IAuthState {
   accessToken: string | undefined;
-  user: IUser | undefined;
+  user: IAuthUser | undefined;
 }
 
 const initialState: IAuthState = {
@@ -17,7 +17,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     userLoggedIn: (state, action) => {
-      const user: IUser = jwtDecode(action.payload);
+      const user: IAuthUser = jwtDecode(action.payload);
       if (user?.exp * 1000 > Date.now()) {
         state.accessToken = action.payload;
         state.user = user;
