@@ -7,12 +7,15 @@ import { useAppDispatch, useAppSelector } from "@/redux/reduxHooks";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 import { IAuthState, userLoggedOut } from "@/redux/features/auth/authSlice";
 import { usePathname, useRouter } from "next/navigation";
+import Button from "../common/Button";
 
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { user } = useAppSelector((state: { auth: IAuthState }) => state.auth);
   const dispatch = useAppDispatch();
+
+  console.log(user);
 
   const handleLogout = () => {
     router.push("/login");
@@ -40,42 +43,42 @@ const Header = () => {
 
           {!user ? (
             <>
-              <button
+              <Button
                 onClick={() => {
                   router.push("/login");
                 }}
                 type="button"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mx- dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-3"
+                className="mr-3"
               >
                 Login
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => {
                   router.push("/register");
                 }}
                 type="button"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mx- dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 Register
-              </button>
+              </Button>
             </>
           ) : (
             <>
-              <button
+              <Button
+                className="mx-4"
+                color="gradient"
                 onClick={() => {
                   router.push(
-                    user.role === "super_admin" || "admin"
+                    user.role === "super_admin" || user.role === "admin"
                       ? "/create-quiz"
                       : "/leader-board"
                   );
                 }}
                 type="button"
-                className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-4 py-2 mx-4 text-center"
               >
-                {user.role === "super_admin" || "admin"
+                {user.role === "super_admin" || user.role === "admin"
                   ? "Create Quiz"
                   : "Leader Board"}
-              </button>
+              </Button>
               <Dropdown
                 arrowIcon={false}
                 inline={true}
@@ -93,6 +96,24 @@ const Header = () => {
                     {user?.email}
                   </span>
                 </Dropdown.Header>
+                {(user.role === "super_admin" || user.role === "admin") && (
+                  <>
+                    <Dropdown.Item
+                      onClick={() => {
+                        router.push("/leader-board");
+                      }}
+                    >
+                      Leader Board
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => {
+                        router.push("/manage-quiz");
+                      }}
+                    >
+                      Manage Quiz
+                    </Dropdown.Item>
+                  </>
+                )}
                 <Dropdown.Item
                   onClick={() => {
                     router.push("/profile");

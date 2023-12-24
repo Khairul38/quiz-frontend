@@ -6,6 +6,7 @@ import Loader from "../common/Loader";
 import { useEffect } from "react";
 import { notify } from "../common/Toastify";
 import { useRouter } from "next/navigation";
+import Button from "../common/Button";
 
 interface SignupFormInputs {
   name: string;
@@ -152,16 +153,16 @@ const RegisterPage = () => {
                 </Link>
               </p>
             </div>
-            <button
+            <Button
               type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="w-full px-5 py-2.5"
             >
               {isLoading ? (
                 <Loader className="my-0" color="text-white" />
               ) : (
                 "Register"
               )}
-            </button>
+            </Button>
           </form>
         </div>
       </div>

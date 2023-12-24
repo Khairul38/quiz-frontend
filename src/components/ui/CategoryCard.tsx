@@ -6,7 +6,7 @@ const CategoryCard = ({ category }: { category: ICategory }) => {
   return (
     <div>
       <Link href={`/quiz/${category?.id}`}>
-        <div className="max-w-sm bg-white border border-blue-200 rounded-lg dark:bg-gray-700 dark:border-blue-700 shadow-md shadow-blue-200 hover:shadow-blue-200 dark:shadow-blue-500 dark:hover:shadow-blue-500 hover:shadow-2xl transition-all p-4">
+        <div className="max-w-sm bg-white border border-blue-200 rounded-lg dark:bg-gray-800 dark:border-blue-700 shadow-md shadow-blue-200 hover:shadow-blue-200 dark:shadow-blue-500 dark:hover:shadow-blue-500 hover:shadow-2xl transition-all p-4">
           {/* <Image
             className="rounded-t-lg w- mx-auto p-"
             src={category?.image}
