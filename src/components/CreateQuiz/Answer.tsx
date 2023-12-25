@@ -58,7 +58,7 @@ const Answer = ({
           <div className="flex-1">
             <Input
               type="text"
-              placeholder="Insert an answer"
+              placeholder="Insert an option"
               defaultValue={answer?.answer}
               onChange={({ target }) =>
                 setQuestionData({
@@ -80,7 +80,7 @@ const Answer = ({
         <div className="ml-14">
           <Textarea
             type="text"
-            placeholder="Explain why this is or isn't the best answer."
+            placeholder="Explain why this is or isn't the best option."
             mandatory
             defaultValue={answer?.explanation}
             onChange={({ target }) =>

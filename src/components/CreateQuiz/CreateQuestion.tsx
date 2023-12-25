@@ -64,7 +64,8 @@ const CreateQuestion = ({
     }
     if (isSuccess) {
       notify("success", "Quiz created successfully");
-      router.push("/manage-quiz");
+      setMultipleChoiceQuestion(DEFAULT_QUESTION);
+      // router.push("/manage-quiz");
     }
   }, [isSuccess, error]);
 
