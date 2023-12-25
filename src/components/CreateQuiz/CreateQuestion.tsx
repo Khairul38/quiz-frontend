@@ -50,7 +50,7 @@ const CreateQuestion = ({
     setMultipleChoiceQuestion((oldData: any) => ({ ...oldData, ...newData }));
   };
 
-  console.log(quizData);
+  console.log(quizData, multipleChoiceQuestion);
 
   const handleSubmitQuestion = () => {
     try {
@@ -142,7 +142,7 @@ const CreateQuestion = ({
 
       <div>
         <label className="block text-sm font-medium mt-5 mb-1">
-          Answers<span className="text-rose-500 ml-1">*</span>
+          Options<span className="text-rose-500 ml-1">*</span>
         </label>
         {multipleChoiceQuestion.quizAnswers.map(
           (answer: any, aIndex: number) => (
@@ -165,7 +165,7 @@ const CreateQuestion = ({
                 ...multipleChoiceQuestion.quizAnswers,
                 {
                   answer: null,
-                  explanation: null,
+                  explanation: "",
                   istrue: false,
                 },
               ],
@@ -173,7 +173,7 @@ const CreateQuestion = ({
           }}
         >
           <HiPlus />
-          Add more answer
+          Add more option
         </Button>
       </div>
 
