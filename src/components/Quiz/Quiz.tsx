@@ -105,14 +105,14 @@ const CourseQuiz = ({ data1, categoryId }) => {
   const [submitQuiz, setSubmitQuiz] = useState(true);
   const router = useRouter();
 
-  console.log(
-    // CurrentQuestionIndex,
-    // questionSection,
-    // selectedAnswer,
-    submitQuiz,
-    score
-    // correctAns
-  );
+  // console.log(
+  //   // CurrentQuestionIndex,
+  //   // questionSection,
+  //   // selectedAnswer,
+  //   submitQuiz,
+  //   score
+  //   // correctAns
+  // );
 
   // Quiz
   // const getQuizById = (quizId) => {
@@ -257,15 +257,6 @@ const CourseQuiz = ({ data1, categoryId }) => {
   };
 
   const handleSubmit = async () => {
-    console.log({
-      totalMark: score.amount,
-      correctlyAnswer: `${score.amount} / ${
-        // @ts-ignore
-        questionSection.questions.length
-      }`,
-      userId: user?.id,
-      categoryId,
-    });
     try {
       // calculateScore();
       createLeaderBoard({

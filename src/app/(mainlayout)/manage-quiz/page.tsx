@@ -119,7 +119,7 @@ const ManageQuizPage = () => {
   const [deleteQuiz, { isSuccess, isLoading: deleteLoad, error }] =
     useDeleteQuizMutation();
 
-  console.log(categoryData, leaderBoardData);
+  // console.log(categoryData, leaderBoardData);
 
   useEffect(() => {
     if (error) {

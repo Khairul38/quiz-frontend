@@ -2,12 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Avatar, Dropdown } from "flowbite-react";
+import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { useAppDispatch, useAppSelector } from "@/redux/reduxHooks";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 import { IAuthState, userLoggedOut } from "@/redux/features/auth/authSlice";
 import { usePathname, useRouter } from "next/navigation";
 import Button from "../common/Button";
+
+import profileImg from '../../assets/avatar-04.jpg'
 
 const Header = () => {
   const router = useRouter();
@@ -85,7 +87,7 @@ const Header = () => {
                 label={
                   <Avatar
                     alt="User settings"
-                    img="../../assets/avatar-04.jpg"
+                    img={profileImg.src}
                     rounded={true}
                   />
                 }
@@ -127,8 +129,7 @@ const Header = () => {
               </Dropdown>
             </>
           )}
-
-          <button
+          {/* <button
             data-collapse-toggle="navbar-sticky"
             type="button"
             className="inline-flex items-center p-2 ml-4 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -151,7 +152,7 @@ const Header = () => {
                 d="M1 1h15M1 7h15M1 13h15"
               />
             </svg>
-          </button>
+          </button> */}
         </div>
         <div
           className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"

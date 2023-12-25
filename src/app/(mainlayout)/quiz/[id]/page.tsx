@@ -22,7 +22,7 @@ const QuizPage = ({ params }: IPageProps) => {
     { refetchOnMountOrArgChange: true, refetchOnFocus: true }
   );
 
-  console.log(data, id);
+  // console.log(data, id);
 
   if (isLoading) return <Loader className="h-[50vh] flex items-end justify-center" />;
 

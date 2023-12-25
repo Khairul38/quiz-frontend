@@ -43,7 +43,7 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
     setMultipleChoiceQuestion((oldData) => ({ ...oldData, ...newData }));
   };
 
-  console.log(multipleChoiceQuestion);
+  // console.log(multipleChoiceQuestion);
 
   const handleSubmitQuestion = () => {
     try {

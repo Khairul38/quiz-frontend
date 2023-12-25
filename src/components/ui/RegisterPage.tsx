@@ -24,7 +24,7 @@ const RegisterPage = () => {
     formState: { errors },
   } = useForm<SignupFormInputs>();
 
-  console.log(data)
+  // console.log(data)
 
   const onSubmit = (data: SignupFormInputs) => {
     if (data.password !== data.confirmPassword) {
