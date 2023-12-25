@@ -28,16 +28,6 @@ const LeaderBoardPage = () => {
       categoryId: categoryID,
     });
 
-  console.log(categoryData, leaderBoardData);
-
-  // useEffect(() => {
-  //   if (categoryData) {
-  //     setCategoryOption(
-  //       categoryData?.data.map((cd: any) => ({ text: cd.name, value: cd.id }))
-  //     );
-  //   }
-  // }, [categoryData]);
-
   if (categoryLoad || leaderBoardLoad) return <Loader className="h-[80vh]" />;
   return (
     <div className="pt-28 pb-10 px-8 mx-auto max-w-screen-2xl min-h-[80vh]">
@@ -56,6 +46,7 @@ const LeaderBoardPage = () => {
           onChange={({ target }) => setCategoryId(target.value)}
         />
       </div>
+
       <div className="bg-white border border-blue-200 rounded-lg dark:bg-gray-800 dark:border-blue-700 shadow-md shadow-blue-200 dark:shadow-blue-500 p-6 min-h-[55vh]">
         <div className="grid grid-cols-3 justify-between px-5 pb-3 gap-5 text-gray-900 dark:text-white text-lg font-bold">
           <p>NAME</p>

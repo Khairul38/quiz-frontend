@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+"use client";
+
+import React, { useState } from "react";
 // import API from "../../../../../utils/API";
 import Button from "../common/Button";
 import NumberCircle from "./NumberCircle/NumberCircle";
@@ -100,15 +102,16 @@ const CourseQuiz = ({ data1, categoryId }) => {
   const [selectedAnswer, setSelectedAnswer] = useState([]);
   const [score, setScore] = useState({ status: false, amount: 0 });
   const [correctAns, setCorrectAns] = useState(false);
-  const [submitQuiz, setSubmitQuiz] = useState(false);
+  const [submitQuiz, setSubmitQuiz] = useState(true);
   const router = useRouter();
 
   console.log(
-    CurrentQuestionIndex,
-    questionSection,
-    selectedAnswer,
-    score,
-    correctAns
+    // CurrentQuestionIndex,
+    // questionSection,
+    // selectedAnswer,
+    submitQuiz,
+    score
+    // correctAns
   );
 
   // Quiz
@@ -131,34 +134,6 @@ const CourseQuiz = ({ data1, categoryId }) => {
   // useEffect(() => {
   //   getQuizById(quizId);
   // }, [quizId]);
-
-  const handleSubmit = async () => {
-    console.log({
-      totalMark: score.amount,
-      correctlyAnswer: `${score.amount} / ${
-        // @ts-ignore
-        questionSection.questions.length
-      }`,
-      userId: user?.id,
-      categoryId,
-    });
-    try {
-      await createLeaderBoard({
-        totalMark: score.amount,
-        correctlyAnswer: `${score.amount} / ${
-          // @ts-ignore
-          questionSection.questions.length
-        }`,
-        userId: user?.id,
-        categoryId,
-      });
-      if (isSuccess) {
-        notify("success", "Quiz submitted successfully");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   // @ts-ignore
   const selectedIndexChange = (number) => {
@@ -262,10 +237,10 @@ const CourseQuiz = ({ data1, categoryId }) => {
     });
   };
 
-  const calculateScore = async () => {
+  const calculateScore = () => {
     setScore((prev) => ({ ...prev, amount: 0 }));
     // @ts-ignore
-    await questionSection.questions.forEach((q) => {
+    questionSection.questions.forEach((q) => {
       if (
         selectedAnswer.find(
           // @ts-ignore
@@ -275,14 +250,39 @@ const CourseQuiz = ({ data1, categoryId }) => {
         setScore((prev) => ({ ...prev, amount: prev.amount + 1 }));
       }
 
-      if (!submitQuiz) {
-        handleSubmit();
-      }
-
       // console.log(
       //   selectedAnswer.includes(q.id)
       // );
     });
+  };
+
+  const handleSubmit = async () => {
+    console.log({
+      totalMark: score.amount,
+      correctlyAnswer: `${score.amount} / ${
+        // @ts-ignore
+        questionSection.questions.length
+      }`,
+      userId: user?.id,
+      categoryId,
+    });
+    try {
+      // calculateScore();
+      createLeaderBoard({
+        totalMark: score.amount,
+        correctlyAnswer: `${score.amount} / ${
+          // @ts-ignore
+          questionSection.questions.length
+        }`,
+        userId: user?.id,
+        categoryId,
+      });
+      if (isSuccess) {
+        notify("success", "Quiz submitted successfully");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   if (questionSection === undefined)
@@ -482,6 +482,15 @@ const CourseQuiz = ({ data1, categoryId }) => {
                         setScore((prev) => ({ ...prev, status: true }));
                         calculateScore();
                         setCorrectAns(false);
+                        createLeaderBoard({
+                          totalMark: score.amount,
+                          correctlyAnswer: `${score.amount} / ${questionSection.questions.length}`,
+                          userId: user?.id,
+                          categoryId,
+                        });
+                        if (isSuccess) {
+                          notify("success", "Quiz submitted successfully");
+                        }
                       } else {
                         router.push("/");
                         setSubmitQuiz(false);

@@ -6,6 +6,13 @@ import Textarea from "../common/Textarea";
 import { check } from "@/utils/check";
 import Select from "../common/Select";
 import Input from "../common/Input";
+import { useGetCategoriesQuery } from "@/redux/features/category/categoryApi";
+import { useCreateQuizMutation } from "@/redux/features/quiz/quizApi";
+import { IAuthState } from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/reduxHooks";
+import { notify } from "../common/Toastify";
+import { useRouter } from "next/navigation";
+import Loader from "../common/Loader";
 
 const DEFAULT_QUESTION = {
   categoryId: null,
@@ -29,12 +36,29 @@ const categoryData = [
   { text: "Javascript", value: "Armenian" },
 ];
 
-const CreateQuestion = () => {
+const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
+  const router = useRouter();
+  const { user } = useAppSelector((state: { auth: IAuthState }) => state.auth);
+
+  const [createQuiz, { isSuccess, isLoading }] = useCreateQuizMutation();
+
   const [multipleChoiceQuestion, setMultipleChoiceQuestion] =
     useState(DEFAULT_QUESTION);
 
   const setQuestionData = (newData: any) => {
     setMultipleChoiceQuestion((oldData) => ({ ...oldData, ...newData }));
+  };
+
+  console.log(multipleChoiceQuestion);
+
+  const handleSubmitQuestion = () => {
+    try {
+      createQuiz({ ...multipleChoiceQuestion, creatorId: user?.id });
+      if (isSuccess) {
+        notify("success", "Quiz created successfully");
+      }
+      router.push("/");
+    } catch (error) {}
   };
   return (
     <div className="dark:text-gray-300 bg-white border border-blue-200 rounded-lg dark:bg-gray-800 dark:border-blue-700 shadow-md shadow-blue-200 dark:shadow-blue-500 p-12">
@@ -43,9 +67,11 @@ const CreateQuestion = () => {
           label="Category"
           type="language"
           mandatory
-          options={categoryData}
+          options={[{ text: "Select Category", value: "" }, ...categoryOption]}
           // defaultValue={createCourseForm.data.language}
-          onChange={({ target }) => setQuestionData({ category: target.value })}
+          onChange={({ target }) =>
+            setQuestionData({ categoryId: target.value })
+          }
         />
         <Select
           label="Multi Choice"
@@ -71,8 +97,7 @@ const CreateQuestion = () => {
           onChange={({ target }) => setQuestionData({ mark: target.value })}
           error={check(multipleChoiceQuestion.mark)}
           supportText={
-            check(multipleChoiceQuestion.mark) &&
-            "This field cannot be empty"
+            check(multipleChoiceQuestion.mark) && "This field cannot be empty"
           }
         />
         <Input
@@ -81,7 +106,9 @@ const CreateQuestion = () => {
           placeholder="Insert your question time."
           mandatory
           // defaultValue={createCourseForm.data.scheduleInfo.courseDuration}
-          onChange={({ target }) => setQuestionData({ timeTaken: target.value })}
+          onChange={({ target }) =>
+            setQuestionData({ timeTaken: target.value })
+          }
           error={check(multipleChoiceQuestion.timeTaken)}
           supportText={
             check(multipleChoiceQuestion.timeTaken) &&
@@ -156,21 +183,21 @@ const CreateQuestion = () => {
             Add Bulk Questions
           </Button> */}
         <Button
-          // disabled={
-          //   multipleChoiceQuestion.question === null ||
-          //   multipleChoiceQuestion.answers[0].answer === null ||
-          //   multipleChoiceQuestion.answers[0].explanation === null ||
-          //   check(multipleChoiceQuestion.question) ||
-          //   check(multipleChoiceQuestion.answers[0].answer) ||
-          //   check(multipleChoiceQuestion.answers[0].explanation)
-          // }
+          disabled={
+            multipleChoiceQuestion.question === null ||
+            multipleChoiceQuestion.answers[0].answer === null ||
+            multipleChoiceQuestion.answers[0].explanation === null ||
+            check(multipleChoiceQuestion.question) ||
+            check(multipleChoiceQuestion.answers[0].answer) ||
+            check(multipleChoiceQuestion.answers[0].explanation)
+          }
           // loading={loadingBtn}
-          // onClick={() => {
-          //   handleSubmitQuestion();
-          // }}
+          onClick={() => {
+            handleSubmitQuestion();
+          }}
           type="button"
         >
-          Add Question
+          {isLoading ? <Loader /> : "Add Question"}
         </Button>
       </div>
     </div>

@@ -15,7 +15,7 @@ const Header = () => {
   const { user } = useAppSelector((state: { auth: IAuthState }) => state.auth);
   const dispatch = useAppDispatch();
 
-  console.log(user);
+  // console.log(user);
 
   const handleLogout = () => {
     router.push("/login");
