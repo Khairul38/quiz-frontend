@@ -17,7 +17,7 @@ const OptionalQuestion = (props) => {
   const selected = (id) => {
     // @ts-ignore
     setSelectedAnswer((pre) => {
-      const found = [...props.inside.answers].find((ob) => ob.id === id);
+      const found = [...props.inside.quizAnswers].find((ob) => ob.id === id);
       if (
         found !== undefined &&
         // @ts-ignore
@@ -51,7 +51,7 @@ const OptionalQuestion = (props) => {
     props.questionSave(props.inside);
   };
 
-  if (props.inside.answers.count === 0) return <div>Loading....</div>;
+  if (props.inside.quizAnswers.count === 0) return <div>Loading....</div>;
   return (
     <div className="flex flex-col">
       {!props.fromParagraph ? (
@@ -87,7 +87,7 @@ const OptionalQuestion = (props) => {
       )}
       <div className="my-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mx-">
-          {[...props.inside.answers].map((ob) => {
+          {[...props.inside.quizAnswers].map((ob) => {
             return (
               <OptionalAnswer
                 key={ob.id}

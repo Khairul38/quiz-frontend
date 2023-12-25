@@ -23,6 +23,6 @@ export const apiSlice = createApi({
     // }
     return result;
   },
-  tagTypes: [],
+  tagTypes: ["quizs", "quiz", "leaderBoards", "leaderBoard"],
   endpoints: () => ({}),
 });

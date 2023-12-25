@@ -8,6 +8,10 @@ import Timer from "./Timer/Timer";
 import WrittenQuestion from "./WrittenQuestion/WrittenQuestion";
 import Loader from "../common/Loader";
 import { useRouter } from "next/navigation";
+import { useCreateLeaderBoardMutation } from "@/redux/features/leaderBoard/leaderBoardApi";
+import { IAuthState } from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/reduxHooks";
+import { notify } from "../common/Toastify";
 
 const data = {
   questions: [
@@ -85,12 +89,18 @@ const data = {
 };
 
 // @ts-ignore
-const CourseQuiz = ({ quizId }) => {
+const CourseQuiz = ({ data1, categoryId }) => {
+  const [createLeaderBoard, { data, isLoading, isSuccess }] =
+    useCreateLeaderBoardMutation();
+  const { user } = useAppSelector((state: { auth: IAuthState }) => state.auth);
+
+  //
   const [CurrentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [questionSection, setQuestionSection] = useState(data);
+  const [questionSection, setQuestionSection] = useState(data1);
   const [selectedAnswer, setSelectedAnswer] = useState([]);
   const [score, setScore] = useState({ status: false, amount: 0 });
   const [correctAns, setCorrectAns] = useState(false);
+  const [submitQuiz, setSubmitQuiz] = useState(false);
   const router = useRouter();
 
   console.log(
@@ -121,6 +131,34 @@ const CourseQuiz = ({ quizId }) => {
   // useEffect(() => {
   //   getQuizById(quizId);
   // }, [quizId]);
+
+  const handleSubmit = async () => {
+    console.log({
+      totalMark: score.amount,
+      correctlyAnswer: `${score.amount} / ${
+        // @ts-ignore
+        questionSection.questions.length
+      }`,
+      userId: user?.id,
+      categoryId,
+    });
+    try {
+      await createLeaderBoard({
+        totalMark: score.amount,
+        correctlyAnswer: `${score.amount} / ${
+          // @ts-ignore
+          questionSection.questions.length
+        }`,
+        userId: user?.id,
+        categoryId,
+      });
+      if (isSuccess) {
+        notify("success", "Quiz submitted successfully");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // @ts-ignore
   const selectedIndexChange = (number) => {
@@ -224,10 +262,10 @@ const CourseQuiz = ({ quizId }) => {
     });
   };
 
-  const calculateScore = () => {
+  const calculateScore = async () => {
     setScore((prev) => ({ ...prev, amount: 0 }));
     // @ts-ignore
-    questionSection.questions.forEach((q) => {
+    await questionSection.questions.forEach((q) => {
       if (
         selectedAnswer.find(
           // @ts-ignore
@@ -235,6 +273,10 @@ const CourseQuiz = ({ quizId }) => {
         ) === undefined
       ) {
         setScore((prev) => ({ ...prev, amount: prev.amount + 1 }));
+      }
+
+      if (!submitQuiz) {
+        handleSubmit();
       }
 
       // console.log(
@@ -442,6 +484,7 @@ const CourseQuiz = ({ quizId }) => {
                         setCorrectAns(false);
                       } else {
                         router.push("/");
+                        setSubmitQuiz(false);
                       }
                     }}
                   >

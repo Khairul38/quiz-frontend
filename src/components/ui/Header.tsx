@@ -85,7 +85,7 @@ const Header = () => {
                 label={
                   <Avatar
                     alt="User settings"
-                    img="./avatar-04.jpg"
+                    img="../../assets/avatar-04.jpg"
                     rounded={true}
                   />
                 }

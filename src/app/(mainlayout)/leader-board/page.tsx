@@ -2,8 +2,11 @@
 
 import Select from "@/components/common/Select";
 import Image from "next/image";
-import React from "react";
-import Profile from "../../../../public/avatar-04.jpg";
+import React, { useEffect, useState } from "react";
+import Profile from "../../../assets/avatar-04.jpg";
+import { useGetLeaderBoardsQuery } from "@/redux/features/leaderBoard/leaderBoardApi";
+import { useGetCategoriesQuery } from "@/redux/features/category/categoryApi";
+import Loader from "@/components/common/Loader";
 
 const categoryData = [
   { text: "Select Category", value: "" },
@@ -14,6 +17,28 @@ const categoryData = [
 ];
 
 const LeaderBoardPage = () => {
+  const [categoryID, setCategoryId] = useState(
+    "32d7dd53-6572-49b6-9a12-f6b4094c974a"
+  );
+  const { data: categoryData, isLoading: categoryLoad } = useGetCategoriesQuery(
+    {}
+  );
+  const { data: leaderBoardData, isLoading: leaderBoardLoad } =
+    useGetLeaderBoardsQuery({
+      categoryId: categoryID,
+    });
+
+  console.log(categoryData, leaderBoardData);
+
+  // useEffect(() => {
+  //   if (categoryData) {
+  //     setCategoryOption(
+  //       categoryData?.data.map((cd: any) => ({ text: cd.name, value: cd.id }))
+  //     );
+  //   }
+  // }, [categoryData]);
+
+  if (categoryLoad || leaderBoardLoad) return <Loader className="h-[80vh]" />;
   return (
     <div className="pt-28 pb-10 px-8 mx-auto max-w-screen-2xl min-h-[80vh]">
       <div className="flex items-start flex-wrap mb-5">
@@ -23,11 +48,12 @@ const LeaderBoardPage = () => {
         <Select
           className="text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 cursor-pointer"
           type="language"
-          options={categoryData}
-          // defaultValue={createCourseForm.data.language}
-          // onChange={({ target }) =>
-          //   setCreateCourseFormData({ language: target.value })
-          // }
+          options={categoryData?.data.map((cd: any) => ({
+            text: cd.name,
+            value: cd.id,
+          }))}
+          defaultValue={"CSS"}
+          onChange={({ target }) => setCategoryId(target.value)}
         />
       </div>
       <div className="bg-white border border-blue-200 rounded-lg dark:bg-gray-800 dark:border-blue-700 shadow-md shadow-blue-200 dark:shadow-blue-500 p-6 min-h-[55vh]">
@@ -36,26 +62,36 @@ const LeaderBoardPage = () => {
           <p className="text-center">CORRECT ANSWER</p>
           <p className="text-right">MARK</p>
         </div>
-        <>
-          <li className="grid grid-cols-3 items-center gap-5 px-5 py-3 bg-slate-100 shadow rounded-lg border border-slate-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">
-            <div className="flex items-center gap-5">
-              <h3 className="text-lg font-semibold">1</h3>
-              <Image
-                className="block mb-4 sm:mb-0 md:w- xl:w-auto shrink-0 rounded-full"
-                src={Profile}
-                alt="title"
-                priority={true}
-                quality={100}
-                width="55"
-                height="55"
-              />
 
-              <h3 className="text-lg font-semibold">Khairul Alam</h3>
-            </div>
-            <p className="text-lg font-semibold text-center">8/10</p>
-            <p className="text-lg font-semibold text-right">8</p>
-          </li>
-        </>
+        <div className="space-y-4">
+          {leaderBoardData?.data?.map((lbd: any, index: any) => (
+            <li
+              key={index}
+              className="grid grid-cols-3 items-center gap-5 px-5 py-3 bg-slate-100 shadow rounded-lg border border-slate-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600"
+            >
+              <div className="flex items-center gap-5">
+                <h3 className="text-lg font-semibold">1</h3>
+                <Image
+                  className="block mb-4 sm:mb-0 md:w- xl:w-auto shrink-0 rounded-full"
+                  src={lbd?.user?.profileImg ? lbd?.user?.profileImg : Profile}
+                  alt="title"
+                  priority={true}
+                  quality={100}
+                  width="55"
+                  height="55"
+                />
+
+                <h3 className="text-lg font-semibold">{lbd?.user?.name}</h3>
+              </div>
+              <p className="text-lg font-semibold text-center">
+                {lbd?.correctlyAnswer}
+              </p>
+              <p className="text-lg font-semibold text-right">
+                {lbd?.totalMark}
+              </p>
+            </li>
+          ))}
+        </div>
       </div>
     </div>
   );

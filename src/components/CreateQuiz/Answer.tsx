@@ -93,7 +93,7 @@ const Answer = ({
       {multipleChoiceQuestion.answers?.length > 1 && (
         <HiTrash
           className={[
-            "text-white bg-indigo-500 p-1 rounded mx-2 cursor-pointer",
+            "text-white bg-red-500 p-1 rounded mx-2 cursor-pointer",
             !hovering && "hidden",
           ].join(" ")}
           size={24}

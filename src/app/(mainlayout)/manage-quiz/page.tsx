@@ -151,7 +151,7 @@ const ManageQuizPage = () => {
                 {/* <TableCell>
                   <div className="w-10 h-10 rounded-md shadow-md overflow-clip">
                     <img
-                      src="./avatar-04.jpg"
+                      src="../../../assets/avatar-04.jpg"
                       className="w-full h-full object-cover shrink-0"
                       alt="quiz image"
                     />

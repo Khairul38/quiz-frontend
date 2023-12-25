@@ -1,11 +1,18 @@
+"use client";
+
+import Loader from "@/components/common/Loader";
 import CategoryCard from "@/components/ui/CategoryCard";
+import { useGetCategoriesQuery } from "@/redux/features/category/categoryApi";
 import { ICategory } from "@/types/globalTypes";
-import { promises as fs } from "fs";
+// import { promises as fs } from "fs";
 
-const HomePage = async () => {
-  const data = await fs.readFile(process.cwd() + "/categories.json", "utf8");
-  const categories = JSON.parse(data);
+const HomePage = () => {
+  // const data = await fs.readFile(process.cwd() + "/categories.json", "utf8");
+  // const categories = JSON.parse(data);
 
+  const { data, isLoading } = useGetCategoriesQuery({});
+
+  if (isLoading) return <Loader className="h-[80vh]" />;
   return (
     <div>
       {/* Quiz Categories */}
@@ -15,7 +22,7 @@ const HomePage = async () => {
           <p>Select & Start Your Quiz!</p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-14 px-8 max-w-screen-2xl mx-auto">
-          {categories.map((category: ICategory) => (
+          {data.data.map((category: ICategory) => (
             <CategoryCard key={category.id} category={category} />
           ))}
         </div>
