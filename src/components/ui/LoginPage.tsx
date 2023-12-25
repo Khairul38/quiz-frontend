@@ -102,15 +102,8 @@ const LoginPage = () => {
                 </Link>
               </p>
             </div>
-            <Button
-              type="submit"
-              className="w-full px-5 py-2.5"
-            >
-              {isLoading ? (
-                <Loader className="my-0" color="text-white" />
-              ) : (
-                "Login"
-              )}
+            <Button type="submit" className="w-full px-5 py-2.5">
+              {isLoading ? <Loader color="text-white" /> : "Login"}
             </Button>
           </form>
         </div>

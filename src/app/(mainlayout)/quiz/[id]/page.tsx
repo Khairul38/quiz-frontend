@@ -24,7 +24,7 @@ const QuizPage = ({ params }: IPageProps) => {
 
   console.log(data, id);
 
-  if (isLoading) return <Loader className="h-[80vh]" />;
+  if (isLoading) return <Loader className="h-[50vh] flex items-end justify-center" />;
 
   if (data.data.length === 0) {
     return (

@@ -158,7 +158,7 @@ const RegisterPage = () => {
               className="w-full px-5 py-2.5"
             >
               {isLoading ? (
-                <Loader className="my-0" color="text-white" />
+                <Loader color="text-white" />
               ) : (
                 "Register"
               )}

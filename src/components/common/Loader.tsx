@@ -11,8 +11,8 @@ const Loader = ({
 }) => {
   return (
     <div
-      className={`flex justify-center items-center ${
-        className ? className : "my-4"
+      className={`${
+        className ? className : "flex justify-center items-center"
       }`}
     >
       <svg

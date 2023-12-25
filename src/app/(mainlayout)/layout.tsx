@@ -40,7 +40,8 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     setLoading(false);
   }, [isLoggedIn, dispatch, router]);
 
-  if (loading) return <Loader className="h-screen" />;
+  if (loading)
+    return <Loader className="h-[50vh] flex items-end justify-center" />;
 
   // useEffect(() => {
   //   if (authChecked && !isLoggedIn) {
@@ -53,7 +54,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Header />
-      {children}
+      <div className="min-h-[calc(100vh-181px)]">{children}</div>
       <Footer />
     </>
   );

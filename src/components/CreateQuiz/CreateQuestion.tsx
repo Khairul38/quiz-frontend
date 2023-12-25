@@ -202,7 +202,7 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
           type="button"
         >
           {isLoading ? (
-            <Loader className="my-0" color="text-white" />
+            <Loader className="px-[34px]" color="text-white" />
           ) : (
             "Add Question"
           )}

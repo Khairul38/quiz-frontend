@@ -12,7 +12,8 @@ const HomePage = () => {
 
   const { data, isLoading } = useGetCategoriesQuery({});
 
-  if (isLoading) return <Loader className="h-[80vh]" />;
+  if (isLoading)
+    return <Loader className="h-[50vh] flex items-end justify-center" />;
   return (
     <div>
       {/* Quiz Categories */}

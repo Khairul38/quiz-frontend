@@ -130,7 +130,7 @@ const ManageQuizPage = () => {
     }
   }, [isSuccess, error]);
 
-  if (categoryLoad || leaderBoardLoad) return <Loader className="h-[80vh]" />;
+  if (categoryLoad || leaderBoardLoad) return <Loader className="h-[50vh] flex items-end justify-center" />;
 
   return (
     <div className="pt-28 pb-16 px-8 mx-auto max-w-screen-2xl min-h-[80vh]">
@@ -265,7 +265,7 @@ const ManageQuizPage = () => {
                       />
                       {deleteLoad ? (
                         <Loader
-                          className="my-0 w-[22px]"
+                          className="w-[22px]"
                           color="text-red-500"
                         />
                       ) : (
