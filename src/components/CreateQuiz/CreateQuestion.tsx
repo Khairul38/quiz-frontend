@@ -7,7 +7,10 @@ import { check } from "@/utils/check";
 import Select from "../common/Select";
 import Input from "../common/Input";
 import { useGetCategoriesQuery } from "@/redux/features/category/categoryApi";
-import { useCreateQuizMutation } from "@/redux/features/quiz/quizApi";
+import {
+  useCreateQuizMutation,
+  useUpdateQuizMutation,
+} from "@/redux/features/quiz/quizApi";
 import { IAuthState } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/reduxHooks";
 import { notify } from "../common/Toastify";
@@ -39,8 +42,10 @@ const CreateQuestion = ({
   const router = useRouter();
   const { user } = useAppSelector((state: { auth: IAuthState }) => state.auth);
 
-  const [createQuiz, { isSuccess, isLoading, isError, error }] =
-    useCreateQuizMutation();
+  const [createQuiz, { isSuccess, isLoading, error }] = useCreateQuizMutation();
+
+  const [updateQuiz, { isSuccess: us, isLoading: ul, error: ue }] =
+    useUpdateQuizMutation();
 
   const [multipleChoiceQuestion, setMultipleChoiceQuestion] = useState(
     quizData ? quizData : DEFAULT_QUESTION
@@ -50,11 +55,18 @@ const CreateQuestion = ({
     setMultipleChoiceQuestion((oldData: any) => ({ ...oldData, ...newData }));
   };
 
-  console.log(quizData, multipleChoiceQuestion);
+  // console.log(quizData, multipleChoiceQuestion);
 
   const handleSubmitQuestion = () => {
     try {
-      createQuiz({ ...multipleChoiceQuestion, creatorId: user?.id });
+      if (quizData) {
+        updateQuiz({
+          id: multipleChoiceQuestion.id,
+          data: { ...multipleChoiceQuestion, creatorId: user?.id },
+        });
+      } else {
+        createQuiz({ ...multipleChoiceQuestion, creatorId: user?.id });
+      }
     } catch (error) {}
   };
 
@@ -62,12 +74,19 @@ const CreateQuestion = ({
     if (error) {
       notify("error", (error as any)?.data?.message);
     }
+    if (ue) {
+      notify("error", (ue as any)?.data?.message);
+    }
     if (isSuccess) {
       notify("success", "Quiz created successfully");
       setQuestionData(DEFAULT_QUESTION);
       // router.push("/manage-quiz");
     }
-  }, [isSuccess, error]);
+    if (us) {
+      notify("success", "Quiz update successfully");
+      router.push("/manage-quiz");
+    }
+  }, [isSuccess, error, us]);
 
   return (
     <div className="dark:text-gray-300 bg-white border border-blue-200 rounded-lg dark:bg-gray-800 dark:border-blue-700 shadow-md shadow-blue-200 dark:shadow-blue-500 p-12">
@@ -168,7 +187,7 @@ const CreateQuestion = ({
               quizAnswers: [
                 ...multipleChoiceQuestion.quizAnswers,
                 {
-                  answer: null,
+                  answer: "",
                   explanation: "",
                   istrue: false,
                 },
@@ -215,8 +234,8 @@ const CreateQuestion = ({
           }}
           type="button"
         >
-          {isLoading ? (
-            <Loader className="px-[34px]" color="text-white" />
+          {isLoading || ul ? (
+            <Loader className="px-[29px]" color="text-white" />
           ) : (
             `${quizData ? "Update Quiz" : "Add Question"}`
           )}

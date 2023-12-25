@@ -17,14 +17,12 @@ const QuizPage = ({ params }: IPageProps) => {
   const router = useRouter();
   const { id } = params;
 
-  const { data, isLoading } = useGetQuizsQuery(
-    { categoryId: id },
-    { refetchOnMountOrArgChange: true, refetchOnFocus: true }
-  );
+  const { data, isLoading } = useGetQuizsQuery({ categoryId: id });
 
   // console.log(data, id);
 
-  if (isLoading) return <Loader className="h-[50vh] flex items-end justify-center" />;
+  if (isLoading)
+    return <Loader className="h-[50vh] flex items-end justify-center" />;
 
   if (data.data.length === 0) {
     return (

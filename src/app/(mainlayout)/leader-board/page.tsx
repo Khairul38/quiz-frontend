@@ -26,7 +26,7 @@ const LeaderBoardPage = () => {
       categoryId: categoryID,
     });
 
-  console.log(categoryID, leaderBoardData);
+  // console.log(categoryID, leaderBoardData);
 
   if (categoryLoad || leaderBoardLoad)
     return <Loader className="h-[50vh] flex items-end justify-center" />;
