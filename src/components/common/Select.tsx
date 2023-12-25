@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent, SelectHTMLAttributes } from "react";
 
 interface Option {
   text: string;
-  value: string;
+  value: any;
 }
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
@@ -13,7 +13,7 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   defaultValue?: string;
   defaultBlank?: boolean;
   type?: string;
-  value?: string;
+  value?: any;
   disabled?: boolean;
 }
 

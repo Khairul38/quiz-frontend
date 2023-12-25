@@ -23,7 +23,7 @@ const quizApi = apiSlice.injectEndpoints({
     }),
     createQuiz: builder.mutation({
       query: (data) => ({
-        url: "/quizs",
+        url: "/quizs/create-quiz",
         method: "POST",
         body: data,
       }),

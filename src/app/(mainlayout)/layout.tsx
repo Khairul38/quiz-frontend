@@ -22,44 +22,33 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
   // console.log(auth, isLoggedIn);
 
-  // useEffect(() => {
-  //   const localAuth = localStorage.getItem("auth");
-  //   const localStateData = localStorage.getItem("stateData");
-  //   const localPaymentData = localStorage.getItem("payment");
-
-  //   if (!isLoggedIn) {
-  //     if (localAuth != null) {
-  //       const auth = JSON.parse(localAuth);
-  //       dispatch(userLoggedIn(auth.accessToken));
-
-  //       if (localStateData) {
-  //         const StateData = JSON.parse(localStateData);
-  //         // dispatch(stateUpdate(StateData));
-  //       } else {
-  //         // dispatch(clearCart());
-  //       }
-  //       if (localPaymentData) {
-  //         const payment = JSON.parse(localPaymentData);
-  //         // dispatch(paymentSuccess(payment));
-  //       }
-  //       setLoading(false);
-  //     } else {
-  //       router.replace("/login");
-  //       setLoading(false);
-  //     }
-  //   }
-  //   setLoading(false);
-  // }, [isLoggedIn, dispatch, router]);
-
-  // if (loading) return <Loader />;
-
   useEffect(() => {
-    if (authChecked && !isLoggedIn) {
-      router.push("/login");
-    }
-  }, [router, pathName, authChecked, isLoggedIn]);
+    const localAuth = localStorage.getItem("auth");
+    const localStateData = localStorage.getItem("stateData");
+    const localPaymentData = localStorage.getItem("payment");
 
-  if (!authChecked) return <Loader />;
+    if (!isLoggedIn) {
+      if (localAuth != null) {
+        const auth = JSON.parse(localAuth);
+        dispatch(userLoggedIn(auth.accessToken));
+        setLoading(false);
+      } else {
+        router.replace("/login");
+        setLoading(false);
+      }
+    }
+    setLoading(false);
+  }, [isLoggedIn, dispatch, router]);
+
+  if (loading) return <Loader className="h-screen" />;
+
+  // useEffect(() => {
+  //   if (authChecked && !isLoggedIn) {
+  //     router.push("/login");
+  //   }
+  // }, [router, pathName, authChecked, isLoggedIn]);
+
+  // if (!authChecked) return <Loader className="h-screen" />;;
 
   return (
     <>

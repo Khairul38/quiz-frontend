@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@/components/common/Button";
+import Loader from "@/components/common/Loader";
 import Select from "@/components/common/Select";
 import {
   Table,
@@ -9,7 +10,14 @@ import {
   TableHead,
   TableRow,
 } from "@/components/common/Table";
-import React from "react";
+import { notify } from "@/components/common/Toastify";
+import { useGetCategoriesQuery } from "@/redux/features/category/categoryApi";
+import {
+  useDeleteQuizMutation,
+  useGetQuizsQuery,
+  useUpdateQuizMutation,
+} from "@/redux/features/quiz/quizApi";
+import React, { useEffect, useState } from "react";
 import { HiPlus, HiPencil, HiTrash } from "react-icons/hi";
 
 const categoryData = [
@@ -94,6 +102,36 @@ const data = [
 ];
 
 const ManageQuizPage = () => {
+  const [categoryID, setCategoryId] = useState(
+    "32d7dd53-6572-49b6-9a12-f6b4094c974a"
+  );
+  const { data: categoryData, isLoading: categoryLoad } = useGetCategoriesQuery(
+    {}
+  );
+  const { data: leaderBoardData, isLoading: leaderBoardLoad } =
+    useGetQuizsQuery({
+      categoryId: categoryID,
+    });
+
+  // const [updateQuiz, { isSuccess:quizUpdateSuccess, isLoading:updateLoad, isError, error }] =
+  //   useUpdateQuizMutation();
+
+  const [deleteQuiz, { isSuccess, isLoading: deleteLoad, error }] =
+    useDeleteQuizMutation();
+
+  console.log(categoryData, leaderBoardData);
+
+  useEffect(() => {
+    if (error) {
+      notify("error", (error as any)?.data?.message);
+    }
+    if (isSuccess) {
+      notify("success", "Quiz deleted successfully");
+    }
+  }, [isSuccess, error]);
+
+  if (categoryLoad || leaderBoardLoad) return <Loader className="h-[80vh]" />;
+
   return (
     <div className="pt-28 pb-16 px-8 mx-auto max-w-screen-2xl min-h-[80vh]">
       <div className="flex items-start flex-wrap mb-5">
@@ -118,17 +156,18 @@ const ManageQuizPage = () => {
         <Select
           className="text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 cursor-pointer"
           type="language"
-          options={categoryData}
+          options={categoryData?.data.map((cd: any) => ({
+            text: cd.name,
+            value: cd.id,
+          }))}
           // defaultValue={createCourseForm.data.language}
-          // onChange={({ target }) =>
-          //   setCreateCourseFormData({ language: target.value })
-          // }
+          onChange={({ target }) => setCategoryId(target.value)}
         />
       </div>
       <div className="w-full">
         <Table
           title="Showing all quiz that you have created"
-          count={`(${data?.length})`}
+          count={`(${leaderBoardData?.data?.length})`}
         >
           <TableHead>
             <TableRow>
@@ -146,7 +185,7 @@ const ManageQuizPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.map((quiz, index) => (
+            {leaderBoardData?.data?.map((quiz: any) => (
               <TableRow key={quiz.id}>
                 {/* <TableCell>
                   <div className="w-10 h-10 rounded-md shadow-md overflow-clip">
@@ -221,16 +260,23 @@ const ManageQuizPage = () => {
                         //   getCourseById(quiz.id);
                         //   localStorage.setItem("courseId", quiz.id);
                         // }}
-                        size={20}
+                        size={22}
                         className="text-slate-500 cursor-pointer dark:text-gray-300"
                       />
-                      <HiTrash
-                        // onClick={() => {
-                        //   handleDeleteCourse(quiz.id);
-                        // }}
-                        size={20}
-                        className="text-red-500 cursor-pointer"
-                      />
+                      {deleteLoad ? (
+                        <Loader
+                          className="my-0 w-[22px]"
+                          color="text-red-500"
+                        />
+                      ) : (
+                        <HiTrash
+                          onClick={() => {
+                            deleteQuiz(quiz.id);
+                          }}
+                          size={22}
+                          className="text-red-500 cursor-pointer"
+                        />
+                      )}
                     </span>
                   </div>
                 </TableCell>

@@ -33,18 +33,24 @@ const Answer = ({
               if (target.checked) {
                 setQuestionData({
                   //@ts-ignore
-                  answers: multipleChoiceQuestion.answers.map((a, i) => {
-                    if (i === aIndex) return { ...a, istrue: target.checked };
-                    else return { ...a };
-                  }),
+                  quizAnswers: multipleChoiceQuestion.quizAnswers.map(
+                    //@ts-ignore
+                    (a, i) => {
+                      if (i === aIndex) return { ...a, istrue: target.checked };
+                      else return { ...a };
+                    }
+                  ),
                 });
               } else {
                 setQuestionData({
                   //@ts-ignore
-                  answers: multipleChoiceQuestion.answers.map((a, i) => {
-                    if (i === aIndex) return { ...a, istrue: target.checked };
-                    else return { ...a };
-                  }),
+                  quizAnswers: multipleChoiceQuestion.quizAnswers.map(
+                    //@ts-ignore
+                    (a, i) => {
+                      if (i === aIndex) return { ...a, istrue: target.checked };
+                      else return { ...a };
+                    }
+                  ),
                 });
               }
             }}
@@ -57,14 +63,17 @@ const Answer = ({
               onChange={({ target }) =>
                 setQuestionData({
                   //@ts-ignore
-                  answers: multipleChoiceQuestion.answers.map((a, i) => {
-                    if (i === aIndex) return { ...a, answer: target.value };
-                    else return { ...a };
-                  }),
+                  quizAnswers: multipleChoiceQuestion.quizAnswers.map(
+                    //@ts-ignore
+                    (a, i) => {
+                      if (i === aIndex) return { ...a, answer: target.value };
+                      else return { ...a };
+                    }
+                  ),
                 })
               }
-              error={check(answer.answer)}
-              supportText={check(answer.answer) && "This field cannot be empty"}
+              // error={check(answer.answer)}
+              // supportText={check(answer.answer) && "This field cannot be empty"}
             />
           </div>
         </div>
@@ -77,20 +86,20 @@ const Answer = ({
             onChange={({ target }) =>
               setQuestionData({
                 // @ts-ignore
-                answers: multipleChoiceQuestion.answers.map((a, i) => {
+                quizAnswers: multipleChoiceQuestion.quizAnswers.map((a, i) => {
                   if (i === aIndex) return { ...a, explanation: target.value };
                   else return { ...a };
                 }),
               })
             }
-            error={check(answer.explanation)}
-            supportText={
-              check(answer.explanation) && "This field cannot be empty"
-            }
+            // error={check(answer.explanation)}
+            // supportText={
+            //   check(answer.explanation) && "This field cannot be empty"
+            // }
           />
         </div>
       </div>
-      {multipleChoiceQuestion.answers?.length > 1 && (
+      {multipleChoiceQuestion.quizAnswers?.length > 1 && (
         <HiTrash
           className={[
             "text-white bg-red-500 p-1 rounded mx-2 cursor-pointer",
@@ -99,7 +108,7 @@ const Answer = ({
           size={24}
           onClick={() => {
             setQuestionData({
-              answers: multipleChoiceQuestion.answers.filter(
+              quizAnswers: multipleChoiceQuestion.quizAnswers.filter(
                 // @ts-ignore
                 (a, i) => i !== aIndex
               ),

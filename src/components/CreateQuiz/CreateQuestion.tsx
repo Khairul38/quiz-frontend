@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../common/Button";
 import { HiPlus } from "react-icons/hi";
 import Answer from "./Answer";
@@ -20,7 +20,7 @@ const DEFAULT_QUESTION = {
   mark: null,
   timeTaken: null,
   question: null,
-  answers: [
+  quizAnswers: [
     {
       answer: null,
       explanation: null,
@@ -28,19 +28,13 @@ const DEFAULT_QUESTION = {
     },
   ],
 };
-const categoryData = [
-  { text: "Select Category", value: "" },
-  { text: "React", value: "id" },
-  { text: "HTML", value: "id" },
-  { text: "CSS", value: "id" },
-  { text: "Javascript", value: "Armenian" },
-];
 
 const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
   const router = useRouter();
   const { user } = useAppSelector((state: { auth: IAuthState }) => state.auth);
 
-  const [createQuiz, { isSuccess, isLoading }] = useCreateQuizMutation();
+  const [createQuiz, { isSuccess, isLoading, isError, error }] =
+    useCreateQuizMutation();
 
   const [multipleChoiceQuestion, setMultipleChoiceQuestion] =
     useState(DEFAULT_QUESTION);
@@ -54,12 +48,19 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
   const handleSubmitQuestion = () => {
     try {
       createQuiz({ ...multipleChoiceQuestion, creatorId: user?.id });
-      if (isSuccess) {
-        notify("success", "Quiz created successfully");
-      }
-      router.push("/");
     } catch (error) {}
   };
+
+  useEffect(() => {
+    if (error) {
+      notify("error", (error as any)?.data?.message);
+    }
+    if (isSuccess) {
+      notify("success", "Quiz created successfully");
+      router.push("/manage-quiz");
+    }
+  }, [isSuccess, error]);
+
   return (
     <div className="dark:text-gray-300 bg-white border border-blue-200 rounded-lg dark:bg-gray-800 dark:border-blue-700 shadow-md shadow-blue-200 dark:shadow-blue-500 p-12">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-end mb-5">
@@ -75,16 +76,17 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
         />
         <Select
           label="Multi Choice"
-          type="language"
           mandatory
           options={[
             { text: "Select Multi Choice", value: "" },
-            { text: "True", value: "true" },
-            { text: "False", value: "false" },
+            { text: "True", value: true },
+            { text: "False", value: false },
           ]}
           // defaultValue={createCourseForm.data.language}
           onChange={({ target }) =>
-            setQuestionData({ multiChoice: target.value })
+            setQuestionData({
+              multiChoice: target.value === "true" ? true : false,
+            })
           }
         />
 
@@ -94,26 +96,28 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
           placeholder="Insert your question mark."
           mandatory
           // defaultValue={createCourseForm.data.scheduleInfo.courseDuration}
-          onChange={({ target }) => setQuestionData({ mark: target.value })}
-          error={check(multipleChoiceQuestion.mark)}
-          supportText={
-            check(multipleChoiceQuestion.mark) && "This field cannot be empty"
+          onChange={({ target }) =>
+            setQuestionData({ mark: Number(target.value) })
           }
+          // error={check(multipleChoiceQuestion.mark)}
+          // supportText={
+          //   check(multipleChoiceQuestion.mark) && "This field cannot be empty"
+          // }
         />
         <Input
           type="number"
           label="Question Time"
-          placeholder="Insert your question time."
+          placeholder="Insert your question time in minute."
           mandatory
           // defaultValue={createCourseForm.data.scheduleInfo.courseDuration}
           onChange={({ target }) =>
-            setQuestionData({ timeTaken: target.value })
+            setQuestionData({ timeTaken: Number(target.value) })
           }
-          error={check(multipleChoiceQuestion.timeTaken)}
-          supportText={
-            check(multipleChoiceQuestion.timeTaken) &&
-            "This field cannot be empty"
-          }
+          // error={check(multipleChoiceQuestion.timeTaken)}
+          // supportText={
+          //   check(multipleChoiceQuestion.timeTaken) &&
+          //   "This field cannot be empty"
+          // }
         />
       </div>
       <Textarea
@@ -123,17 +127,17 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
         mandatory
         // defaultValue={multipleChoiceQuestion.question}
         onChange={({ target }) => setQuestionData({ question: target.value })}
-        error={check(multipleChoiceQuestion.question)}
-        supportText={
-          check(multipleChoiceQuestion.question) && "This field cannot be empty"
-        }
+        // error={check(multipleChoiceQuestion.question)}
+        // supportText={
+        //   check(multipleChoiceQuestion.question) && "This field cannot be empty"
+        // }
       />
 
       <div>
         <label className="block text-sm font-medium mt-5 mb-1">
           Answers<span className="text-rose-500 ml-1">*</span>
         </label>
-        {multipleChoiceQuestion.answers.map((answer, aIndex) => (
+        {multipleChoiceQuestion.quizAnswers.map((answer, aIndex) => (
           <Answer
             key={aIndex}
             check={check}
@@ -148,8 +152,8 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
           className="flex items-center gap-2 mt-5"
           onClick={() => {
             setQuestionData({
-              answers: [
-                ...multipleChoiceQuestion.answers,
+              quizAnswers: [
+                ...multipleChoiceQuestion.quizAnswers,
                 {
                   answer: null,
                   explanation: null,
@@ -185,11 +189,11 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
         <Button
           disabled={
             multipleChoiceQuestion.question === null ||
-            multipleChoiceQuestion.answers[0].answer === null ||
-            multipleChoiceQuestion.answers[0].explanation === null ||
+            multipleChoiceQuestion.quizAnswers[0].answer === null ||
+            multipleChoiceQuestion.quizAnswers[0].explanation === null ||
             check(multipleChoiceQuestion.question) ||
-            check(multipleChoiceQuestion.answers[0].answer) ||
-            check(multipleChoiceQuestion.answers[0].explanation)
+            check(multipleChoiceQuestion.quizAnswers[0].answer) ||
+            check(multipleChoiceQuestion.quizAnswers[0].explanation)
           }
           // loading={loadingBtn}
           onClick={() => {
@@ -197,7 +201,11 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
           }}
           type="button"
         >
-          {isLoading ? <Loader /> : "Add Question"}
+          {isLoading ? (
+            <Loader className="my-0" color="text-white" />
+          ) : (
+            "Add Question"
+          )}
         </Button>
       </div>
     </div>
