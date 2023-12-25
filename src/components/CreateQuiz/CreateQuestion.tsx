@@ -15,14 +15,14 @@ import { useRouter } from "next/navigation";
 import Loader from "../common/Loader";
 
 const DEFAULT_QUESTION = {
-  categoryId: null,
-  multiChoice: null,
-  mark: null,
-  timeTaken: null,
-  question: null,
+  categoryId: "",
+  multiChoice: "",
+  mark: "",
+  timeTaken: "",
+  question: "",
   quizAnswers: [
     {
-      answer: null,
+      answer: "",
       explanation: "",
       istrue: false,
     },
@@ -64,7 +64,7 @@ const CreateQuestion = ({
     }
     if (isSuccess) {
       notify("success", "Quiz created successfully");
-      setMultipleChoiceQuestion(DEFAULT_QUESTION);
+      setQuestionData(DEFAULT_QUESTION);
       // router.push("/manage-quiz");
     }
   }, [isSuccess, error]);
@@ -73,24 +73,27 @@ const CreateQuestion = ({
     <div className="dark:text-gray-300 bg-white border border-blue-200 rounded-lg dark:bg-gray-800 dark:border-blue-700 shadow-md shadow-blue-200 dark:shadow-blue-500 p-12">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-end mb-5">
         <Select
+          placeholder="Select Category"
+          defaultBlank
           label="Category"
           type="language"
           mandatory
-          options={[{ text: "Select Category", value: "" }, ...categoryOption]}
-          defaultValue={multipleChoiceQuestion.categoryId}
+          options={categoryOption}
+          value={multipleChoiceQuestion.categoryId}
           onChange={({ target }) =>
             setQuestionData({ categoryId: target.value })
           }
         />
         <Select
           label="Allow Multiple Answer"
+          placeholder="Choose"
+          defaultBlank
           mandatory
           options={[
-            { text: "Choose", value: "" },
             { text: "Yes", value: true },
             { text: "No", value: false },
           ]}
-          defaultValue={multipleChoiceQuestion.multiChoice}
+          value={multipleChoiceQuestion.multiChoice}
           onChange={({ target }) =>
             setQuestionData({
               multiChoice: target.value === "true" ? true : false,
@@ -103,7 +106,7 @@ const CreateQuestion = ({
           label="Question Mark"
           placeholder="Insert your question mark."
           mandatory
-          defaultValue={multipleChoiceQuestion.mark}
+          value={multipleChoiceQuestion.mark}
           onChange={({ target }) =>
             setQuestionData({ mark: Number(target.value) })
           }
@@ -117,7 +120,7 @@ const CreateQuestion = ({
           label="Question Time"
           placeholder="Insert your question time in minute."
           mandatory
-          defaultValue={multipleChoiceQuestion.timeTaken}
+          value={multipleChoiceQuestion.timeTaken}
           onChange={({ target }) =>
             setQuestionData({ timeTaken: Number(target.value) })
           }
@@ -133,7 +136,7 @@ const CreateQuestion = ({
         label="Question"
         placeholder="Insert your question"
         mandatory
-        defaultValue={multipleChoiceQuestion.question}
+        value={multipleChoiceQuestion.question}
         onChange={({ target }) => setQuestionData({ question: target.value })}
         // error={check(multipleChoiceQuestion.question)}
         // supportText={
@@ -198,13 +201,6 @@ const CreateQuestion = ({
           </Button> */}
         <Button
           disabled={
-            multipleChoiceQuestion.categoryId === null ||
-            multipleChoiceQuestion.multiChoice === null ||
-            multipleChoiceQuestion.mark === null ||
-            multipleChoiceQuestion.timeTaken === null ||
-            multipleChoiceQuestion.question === null ||
-            multipleChoiceQuestion.quizAnswers[0].answer === null ||
-            // multipleChoiceQuestion.quizAnswers[0].explanation === null ||
             check(multipleChoiceQuestion.timeTaken) ||
             check(multipleChoiceQuestion.mark) ||
             check(multipleChoiceQuestion.multiChoice) ||

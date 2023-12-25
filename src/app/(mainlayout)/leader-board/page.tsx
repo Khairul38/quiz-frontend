@@ -8,18 +8,16 @@ import { useGetLeaderBoardsQuery } from "@/redux/features/leaderBoard/leaderBoar
 import { useGetCategoriesQuery } from "@/redux/features/category/categoryApi";
 import Loader from "@/components/common/Loader";
 
-const categoryData = [
-  { text: "Select Category", value: "" },
-  { text: "React", value: "id" },
-  { text: "HTML", value: "id" },
-  { text: "CSS", value: "id" },
-  { text: "Javascript", value: "Armenian" },
-];
+// const categoryData = [
+//   { text: "Select Category", value: "" },
+//   { text: "React", value: "id" },
+//   { text: "HTML", value: "id" },
+//   { text: "CSS", value: "id" },
+//   { text: "Javascript", value: "Armenian" },
+// ];
 
 const LeaderBoardPage = () => {
-  const [categoryID, setCategoryId] = useState(
-    "32d7dd53-6572-49b6-9a12-f6b4094c974a"
-  );
+  const [categoryID, setCategoryId] = useState("");
   const { data: categoryData, isLoading: categoryLoad } = useGetCategoriesQuery(
     {}
   );
@@ -28,7 +26,10 @@ const LeaderBoardPage = () => {
       categoryId: categoryID,
     });
 
-  if (categoryLoad || leaderBoardLoad) return <Loader className="h-[50vh] flex items-end justify-center" />;
+  console.log(categoryID, leaderBoardData);
+
+  if (categoryLoad || leaderBoardLoad)
+    return <Loader className="h-[50vh] flex items-end justify-center" />;
   return (
     <div className="pt-28 pb-10 px-8 mx-auto max-w-screen-2xl min-h-[80vh]">
       <div className="flex items-start flex-wrap mb-5">
@@ -38,10 +39,13 @@ const LeaderBoardPage = () => {
         <Select
           className="text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 cursor-pointer"
           type="language"
-          options={categoryData?.data.map((cd: any) => ({
-            text: cd.name,
-            value: cd.id,
-          }))}
+          options={[
+            { text: "All", value: "" },
+            ...categoryData?.data.map((cd: any) => ({
+              text: cd.name,
+              value: cd.id,
+            })),
+          ]}
           defaultValue={"CSS"}
           onChange={({ target }) => setCategoryId(target.value)}
         />
@@ -61,7 +65,7 @@ const LeaderBoardPage = () => {
               className="grid grid-cols-3 items-center gap-5 px-5 py-3 bg-slate-100 shadow rounded-lg border border-slate-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600"
             >
               <div className="flex items-center gap-5">
-                <h3 className="text-lg font-semibold">1</h3>
+                <h3 className="text-lg font-semibold">{index + 1}</h3>
                 <Image
                   className="block mb-4 sm:mb-0 md:w- xl:w-auto shrink-0 rounded-full"
                   src={lbd?.user?.profileImg ? lbd?.user?.profileImg : Profile}

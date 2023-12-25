@@ -10,7 +10,7 @@ const leaderBoardApi = apiSlice.injectEndpoints({
         userId,
         categoryId,
       }) => {
-        let queryString = `/leaderBoards?size=50`;
+        let queryString = `/leaderBoards?sortBy=totalMark&size=50`;
         if (searchTerm && searchTerm.length > 0) {
           queryString += `&searchTerm=${searchTerm}`;
         }

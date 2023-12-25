@@ -30,7 +30,7 @@ const Input: React.FC<InputProps> = ({
       ? "px-4 py-3"
       : "px-2.5 py-2.5";
   const styles = [
-    "form-input w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+    "form-input w-full bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-400/90 dark:placeholder-gray-400/80 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
     padding,
     "disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed",
     className,

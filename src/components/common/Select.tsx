@@ -46,7 +46,7 @@ function Select({
         </label>
       )}
       <select
-        className={`w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+        className={`w-full bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
           disabled ? "cursor-not-allowed" : "cursor-pointer"
         } ${(empty || (defaultBlank && prestine)) && "text-slate-400"}`}
         value={value}
@@ -60,7 +60,12 @@ function Select({
         {!empty ? (
           <>
             {defaultBlank && (
-              <option value="" disabled hidden>
+              <option
+                className="text-gray-400/90 dark:text-gray-400/80"
+                value=""
+                disabled
+                hidden
+              >
                 {placeholder}
               </option>
             )}
@@ -77,7 +82,12 @@ function Select({
           </>
         ) : (
           <>
-            <option value="" disabled hidden>
+            <option
+              className="text-gray-400/90 dark:text-gray-400/80"
+              value=""
+              disabled
+              hidden
+            >
               {placeholder}
             </option>
             <option value="__empty" disabled>
