@@ -23,27 +23,34 @@ const DEFAULT_QUESTION = {
   quizAnswers: [
     {
       answer: null,
-      explanation: null,
+      explanation: "",
       istrue: false,
     },
   ],
 };
 
-const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
+const CreateQuestion = ({
+  categoryOption,
+  quizData,
+}: {
+  categoryOption?: any;
+  quizData?: any;
+}) => {
   const router = useRouter();
   const { user } = useAppSelector((state: { auth: IAuthState }) => state.auth);
 
   const [createQuiz, { isSuccess, isLoading, isError, error }] =
     useCreateQuizMutation();
 
-  const [multipleChoiceQuestion, setMultipleChoiceQuestion] =
-    useState(DEFAULT_QUESTION);
+  const [multipleChoiceQuestion, setMultipleChoiceQuestion] = useState(
+    quizData ? quizData : DEFAULT_QUESTION
+  );
 
   const setQuestionData = (newData: any) => {
-    setMultipleChoiceQuestion((oldData) => ({ ...oldData, ...newData }));
+    setMultipleChoiceQuestion((oldData: any) => ({ ...oldData, ...newData }));
   };
 
-  // console.log(multipleChoiceQuestion);
+  console.log(quizData);
 
   const handleSubmitQuestion = () => {
     try {
@@ -69,20 +76,20 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
           type="language"
           mandatory
           options={[{ text: "Select Category", value: "" }, ...categoryOption]}
-          // defaultValue={createCourseForm.data.language}
+          defaultValue={multipleChoiceQuestion.categoryId}
           onChange={({ target }) =>
             setQuestionData({ categoryId: target.value })
           }
         />
         <Select
-          label="Multi Choice"
+          label="Allow Multiple Answer"
           mandatory
           options={[
-            { text: "Select Multi Choice", value: "" },
-            { text: "True", value: true },
-            { text: "False", value: false },
+            { text: "Choose", value: "" },
+            { text: "Yes", value: true },
+            { text: "No", value: false },
           ]}
-          // defaultValue={createCourseForm.data.language}
+          defaultValue={multipleChoiceQuestion.multiChoice}
           onChange={({ target }) =>
             setQuestionData({
               multiChoice: target.value === "true" ? true : false,
@@ -95,7 +102,7 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
           label="Question Mark"
           placeholder="Insert your question mark."
           mandatory
-          // defaultValue={createCourseForm.data.scheduleInfo.courseDuration}
+          defaultValue={multipleChoiceQuestion.mark}
           onChange={({ target }) =>
             setQuestionData({ mark: Number(target.value) })
           }
@@ -109,7 +116,7 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
           label="Question Time"
           placeholder="Insert your question time in minute."
           mandatory
-          // defaultValue={createCourseForm.data.scheduleInfo.courseDuration}
+          defaultValue={multipleChoiceQuestion.timeTaken}
           onChange={({ target }) =>
             setQuestionData({ timeTaken: Number(target.value) })
           }
@@ -125,7 +132,7 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
         label="Question"
         placeholder="Insert your question"
         mandatory
-        // defaultValue={multipleChoiceQuestion.question}
+        defaultValue={multipleChoiceQuestion.question}
         onChange={({ target }) => setQuestionData({ question: target.value })}
         // error={check(multipleChoiceQuestion.question)}
         // supportText={
@@ -137,16 +144,18 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
         <label className="block text-sm font-medium mt-5 mb-1">
           Answers<span className="text-rose-500 ml-1">*</span>
         </label>
-        {multipleChoiceQuestion.quizAnswers.map((answer, aIndex) => (
-          <Answer
-            key={aIndex}
-            check={check}
-            multipleChoiceQuestion={multipleChoiceQuestion}
-            answer={answer}
-            aIndex={aIndex}
-            setQuestionData={setQuestionData}
-          />
-        ))}
+        {multipleChoiceQuestion.quizAnswers.map(
+          (answer: any, aIndex: number) => (
+            <Answer
+              key={aIndex}
+              check={check}
+              multipleChoiceQuestion={multipleChoiceQuestion}
+              answer={answer}
+              aIndex={aIndex}
+              setQuestionData={setQuestionData}
+            />
+          )
+        )}
         <Button
           color="secondary"
           className="flex items-center gap-2 mt-5"
@@ -170,10 +179,10 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
 
       <div className="flex justify-end mt-4 space-x-2">
         <Button
-          // onClick={() => {
-          //   setAddMultipleChoice(false);
-          //   setAddContentSection(true);
-          // }}
+          onClick={() => {
+            router.push("/manage-quiz");
+            setMultipleChoiceQuestion(DEFAULT_QUESTION);
+          }}
           // danger
           type="button"
           color="danger"
@@ -188,12 +197,20 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
           </Button> */}
         <Button
           disabled={
+            multipleChoiceQuestion.categoryId === null ||
+            multipleChoiceQuestion.multiChoice === null ||
+            multipleChoiceQuestion.mark === null ||
+            multipleChoiceQuestion.timeTaken === null ||
             multipleChoiceQuestion.question === null ||
             multipleChoiceQuestion.quizAnswers[0].answer === null ||
-            multipleChoiceQuestion.quizAnswers[0].explanation === null ||
+            // multipleChoiceQuestion.quizAnswers[0].explanation === null ||
+            check(multipleChoiceQuestion.timeTaken) ||
+            check(multipleChoiceQuestion.mark) ||
+            check(multipleChoiceQuestion.multiChoice) ||
+            check(multipleChoiceQuestion.categoryId) ||
             check(multipleChoiceQuestion.question) ||
-            check(multipleChoiceQuestion.quizAnswers[0].answer) ||
-            check(multipleChoiceQuestion.quizAnswers[0].explanation)
+            check(multipleChoiceQuestion.quizAnswers[0].answer)
+            // || check(multipleChoiceQuestion.quizAnswers[0].explanation)
           }
           // loading={loadingBtn}
           onClick={() => {
@@ -204,7 +221,7 @@ const CreateQuestion = ({ categoryOption }: { categoryOption: any }) => {
           {isLoading ? (
             <Loader className="px-[34px]" color="text-white" />
           ) : (
-            "Add Question"
+            `${quizData ? "Update Quiz" : "Add Question"}`
           )}
         </Button>
       </div>

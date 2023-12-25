@@ -59,7 +59,7 @@ const Answer = ({
             <Input
               type="text"
               placeholder="Insert an answer"
-              // defaultValue={learningPoint?.title}
+              defaultValue={answer?.answer}
               onChange={({ target }) =>
                 setQuestionData({
                   //@ts-ignore
@@ -82,7 +82,7 @@ const Answer = ({
             type="text"
             placeholder="Explain why this is or isn't the best answer."
             mandatory
-            // defaultValue={learningPoint?.description}
+            defaultValue={answer?.explanation}
             onChange={({ target }) =>
               setQuestionData({
                 // @ts-ignore

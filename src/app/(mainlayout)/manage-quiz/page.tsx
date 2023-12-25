@@ -17,6 +17,7 @@ import {
   useGetQuizsQuery,
   useUpdateQuizMutation,
 } from "@/redux/features/quiz/quizApi";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { HiPlus, HiPencil, HiTrash } from "react-icons/hi";
 
@@ -102,6 +103,7 @@ const data = [
 ];
 
 const ManageQuizPage = () => {
+  const router = useRouter();
   const [categoryID, setCategoryId] = useState(
     "32d7dd53-6572-49b6-9a12-f6b4094c974a"
   );
@@ -130,7 +132,8 @@ const ManageQuizPage = () => {
     }
   }, [isSuccess, error]);
 
-  if (categoryLoad || leaderBoardLoad) return <Loader className="h-[50vh] flex items-end justify-center" />;
+  if (categoryLoad || leaderBoardLoad)
+    return <Loader className="h-[50vh] flex items-end justify-center" />;
 
   return (
     <div className="pt-28 pb-16 px-8 mx-auto max-w-screen-2xl min-h-[80vh]">
@@ -230,44 +233,14 @@ const ManageQuizPage = () => {
                   <div className="mr-5">
                     <span className="flex justify-end w-full space-x-5">
                       <HiPencil
-                        // onClick={() => {
-                        //   router.push(
-                        //     "/company/certification-courses/create-quiz/initial-info"
-                        //   );
-                        //   localStorage.setItem(
-                        //     "status",
-                        //     JSON.stringify({
-                        //       initialInfo: "initial-info",
-                        //       initialInfoComplete: true,
-                        //       initialInfoPart2Complete: true,
-                        //       createCourse: "create-quiz",
-                        //       createCourseComplete: true,
-                        //       curriculum: "curriculum",
-                        //       curriculumComplete: true,
-                        //       captions: "captions",
-                        //       captionsComplete: true,
-                        //       pricing: "pricing",
-                        //       pricingComplete: true,
-                        //       promotions: "promotions",
-                        //       promotionsComplete: true,
-                        //       courseMessages: "quiz-messages",
-                        //       courseMessagesComplete: true,
-                        //       updating: true,
-                        //       updatingId: quiz.id,
-                        //     })
-                        //   );
-                        //   setCreateCourseForm(DEFAULT_CREATE_COURSE_FORM);
-                        //   getCourseById(quiz.id);
-                        //   localStorage.setItem("courseId", quiz.id);
-                        // }}
+                        onClick={() => {
+                          router.push(`/update-quiz/${quiz.id}`);
+                        }}
                         size={22}
                         className="text-slate-500 cursor-pointer dark:text-gray-300"
                       />
                       {deleteLoad ? (
-                        <Loader
-                          className="w-[22px]"
-                          color="text-red-500"
-                        />
+                        <Loader className="w-[22px]" color="text-red-500" />
                       ) : (
                         <HiTrash
                           onClick={() => {
