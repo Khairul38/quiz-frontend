@@ -24,8 +24,6 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const localAuth = localStorage.getItem("auth");
-    const localStateData = localStorage.getItem("stateData");
-    const localPaymentData = localStorage.getItem("payment");
 
     if (!isLoggedIn) {
       if (localAuth != null) {
