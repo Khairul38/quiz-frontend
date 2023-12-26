@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import API from "../../../../../utils/API";
 import Button from "../common/Button";
 import NumberCircle from "./NumberCircle/NumberCircle";
@@ -90,9 +90,13 @@ const data = {
   ],
 };
 
+interface ScoreResult {
+  amount: number;
+}
+
 // @ts-ignore
 const CourseQuiz = ({ data1, categoryId }) => {
-  const [createLeaderBoard, { data, isLoading, isSuccess }] =
+  const [createLeaderBoard, { isLoading, isSuccess, error }] =
     useCreateLeaderBoardMutation();
   const { user } = useAppSelector((state: { auth: IAuthState }) => state.auth);
 
@@ -102,38 +106,58 @@ const CourseQuiz = ({ data1, categoryId }) => {
   const [selectedAnswer, setSelectedAnswer] = useState([]);
   const [score, setScore] = useState({ status: false, amount: 0 });
   const [correctAns, setCorrectAns] = useState(false);
-  const [submitQuiz, setSubmitQuiz] = useState(true);
+  const [submitQuiz, setSubmitQuiz] = useState(false);
   const router = useRouter();
 
-  // console.log(
-  //   // CurrentQuestionIndex,
-  //   // questionSection,
-  //   // selectedAnswer,
-  //   submitQuiz,
-  //   score
-  //   // correctAns
-  // );
+  // console.log(score, submitQuiz);
 
-  // Quiz
-  // const getQuizById = (quizId) => {
-  //   API("GET", `lectureQuiz/find?id=${quizId}&full=true`)
-  //     .then((data) => {
-  //       setQuestionSection({
-  //         ...data,
-  //         questions: data.questions.map((q) => ({
-  //           ...q,
-  //           QuestionType: 1,
-  //           allowedAnswerLimit: 2,
-  //           currentMode: 1,
-  //         })),
-  //       });
-  //     })
-  //     .catch((error) => notify("error", error.message));
-  // };
+  const calculateScore = (): Promise<ScoreResult> => {
+    return new Promise<ScoreResult>((resolve) => {
+      const result: ScoreResult = { amount: 0 };
 
-  // useEffect(() => {
-  //   getQuizById(quizId);
-  // }, [quizId]);
+      // @ts-ignore
+      questionSection.questions.forEach((q) => {
+        if (
+          selectedAnswer.find(
+            // @ts-ignore
+            (a) => a.questionId === q.id && a.istrue === false
+          ) === undefined
+        ) {
+          result.amount += q.mark;
+          setScore((prev) => ({ ...prev, amount: prev.amount + q.mark }));
+        }
+      });
+
+      // Resolve the Promise with the result after the calculations are done
+      resolve(result);
+    });
+  };
+
+  const handleSubmit = async (): Promise<void> => {
+    try {
+      // Wait for the calculateScore function to complete and get the result
+      const result = await calculateScore();
+
+      // Access the calculated score from the result
+      const calculatedScore = result.amount;
+
+      createLeaderBoard({
+        totalMark: calculatedScore,
+        correctlyAnswer: `${calculatedScore} / ${
+          // @ts-ignore
+          questionSection.questions.length
+        }`,
+        userId: user?.id,
+        categoryId,
+      });
+
+      if (isSuccess) {
+        notify("success", "Quiz submitted successfully");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // @ts-ignore
   const selectedIndexChange = (number) => {
@@ -237,44 +261,17 @@ const CourseQuiz = ({ data1, categoryId }) => {
     });
   };
 
-  const calculateScore = () => {
-    setScore((prev) => ({ ...prev, amount: 0 }));
-    // @ts-ignore
-    questionSection.questions.forEach((q) => {
-      if (
-        selectedAnswer.find(
-          // @ts-ignore
-          (a) => a.questionId === q.id && a.istrue === false
-        ) === undefined
-      ) {
-        setScore((prev) => ({ ...prev, amount: prev.amount + 1 }));
-      }
-
-      // console.log(
-      //   selectedAnswer.includes(q.id)
-      // );
-    });
-  };
-
-  const handleSubmit = async () => {
-    try {
-      // calculateScore();
-      createLeaderBoard({
-        totalMark: score.amount,
-        correctlyAnswer: `${score.amount} / ${
-          // @ts-ignore
-          questionSection.questions.length
-        }`,
-        userId: user?.id,
-        categoryId,
-      });
-      if (isSuccess) {
-        notify("success", "Quiz submitted successfully");
-      }
-    } catch (error) {
-      console.error(error);
+  useEffect(() => {
+    if (error) {
+      notify("error", (error as any)?.data?.message);
     }
-  };
+    if (isSuccess) {
+      notify("success", "Quiz submitted successfully");
+      setScore((prev) => ({ ...prev, status: true }));
+      setCorrectAns(false);
+      setSubmitQuiz(true);
+    }
+  }, [isSuccess, error]);
 
   if (questionSection === undefined)
     return (
@@ -470,17 +467,11 @@ const CourseQuiz = ({ data1, categoryId }) => {
                     // @ts-ignore
                     onClick={() => {
                       if (correctAns || !score.status) {
-                        setScore((prev) => ({ ...prev, status: true }));
-                        calculateScore();
-                        setCorrectAns(false);
-                        createLeaderBoard({
-                          totalMark: score.amount,
-                          correctlyAnswer: `${score.amount} / ${questionSection.questions.length}`,
-                          userId: user?.id,
-                          categoryId,
-                        });
-                        if (isSuccess) {
-                          notify("success", "Quiz submitted successfully");
+                        if (submitQuiz) {
+                          setScore((prev) => ({ ...prev, status: true }));
+                          setCorrectAns(false);
+                        } else {
+                          handleSubmit();
                         }
                       } else {
                         router.push("/");
@@ -488,11 +479,15 @@ const CourseQuiz = ({ data1, categoryId }) => {
                       }
                     }}
                   >
-                    {correctAns
-                      ? "See Score"
-                      : score.status
-                      ? "Exit Quiz"
-                      : "Submit Quiz"}
+                    {isLoading ? (
+                      <Loader color="text-white" />
+                    ) : correctAns ? (
+                      "See Score"
+                    ) : score.status ? (
+                      "Exit Quiz"
+                    ) : (
+                      "Submit Quiz"
+                    )}
                   </Button>
                 </div>
               </div>
