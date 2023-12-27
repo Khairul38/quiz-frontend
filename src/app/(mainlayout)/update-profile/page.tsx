@@ -117,15 +117,17 @@ const UpdateProfilePage = () => {
                 ...register("profileImg"),
               }}
             />
-            <Textarea
-              type="text"
-              label="Your address"
-              placeholder="Insert your address here."
-              defaultValue={user.address}
-              hookForm={{
-                ...register("address"),
-              }}
-            />
+            <div className="col-span-2">
+              <Textarea
+                type="text"
+                label="Your address"
+                placeholder="Insert your address here."
+                defaultValue={user.address}
+                hookForm={{
+                  ...register("address"),
+                }}
+              />
+            </div>
           </div>
 
           <div className="flex justify-end mt-4 space-x-2">

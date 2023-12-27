@@ -94,11 +94,11 @@ const ProfilePage = () => {
                 : "Performer"}
             </div>
             {/* Meta */}
-            <div className="flex flex-wrap justify-center sm:justify-start space-x-4">
+            <div className="flex flex-wrap justify-center sm:justify-start gap-4">
               {user.address && (
-                <div className="flex items-center">
+                <div className="flex">
                   <MdOutlineLocationOn size={21} className="text-slate-400" />
-                  <span className="text-sm font-medium whitespace-nowrap text-slate-500 ml-2">
+                  <span className="text-sm font-medium  text-slate-500 ml-2 text-wrap">
                     {user.address}
                   </span>
                 </div>
