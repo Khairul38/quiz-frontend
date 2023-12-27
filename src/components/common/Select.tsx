@@ -15,6 +15,7 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   type?: string;
   value?: any;
   disabled?: boolean;
+  hookForm?: any;
 }
 
 function Select({
@@ -27,6 +28,7 @@ function Select({
   type,
   value,
   disabled,
+  hookForm,
   ...props
 }: SelectProps) {
   const [prestine, setPrestine] = useState(true);
@@ -51,6 +53,7 @@ function Select({
         } ${(empty || (defaultBlank && prestine)) && "text-slate-400"}`}
         value={value}
         disabled={disabled ? disabled : false}
+        {...hookForm}
         {...props}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => {
           setPrestine(false);

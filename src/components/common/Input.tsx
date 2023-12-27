@@ -10,6 +10,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
   success?: boolean;
   className?: string;
+  hookForm?: any;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -21,6 +22,7 @@ const Input: React.FC<InputProps> = ({
   error,
   success,
   className,
+  hookForm,
   ...props
 }) => {
   const padding =
@@ -48,7 +50,12 @@ const Input: React.FC<InputProps> = ({
           </label>
         </div>
       )}
-      <input className={styles.join(" ")} type={type} {...props} />
+      <input
+        className={styles.join(" ")}
+        type={type}
+        {...hookForm}
+        {...props}
+      />
       {supportText && (
         <div
           className={`text-xs mt-1 ${

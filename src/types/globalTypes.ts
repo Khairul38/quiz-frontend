@@ -3,6 +3,9 @@ export interface IAuthUser {
   name: string;
   email: string;
   role: string;
+  address: string;
+  contactNo: string;
+  profileImg: string;
   iat: number;
   exp: number;
 }

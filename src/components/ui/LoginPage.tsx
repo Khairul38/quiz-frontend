@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { notify } from "../common/Toastify";
 import { useRouter } from "next/navigation";
 import Button from "../common/Button";
+import Input from "../common/Input";
 
 interface LoginFormInputs {
   email: string;
@@ -53,39 +54,37 @@ const LoginPage = () => {
               Enter your email & password below
             </p>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-4 text-gray-900 dark:text-white"
+          >
             <div>
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Your email
-              </label>
-              <input
+              <Input
+                label="Your email"
+                mandatory
                 type="email"
                 id="email"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="name@gmail.com"
+                placeholder="Inter your email here"
                 required
-                {...register("email", { required: "Email is required" })}
+                hookForm={{
+                  ...register("email", { required: "Email is required" }),
+                }}
               />
               {errors.email && (
                 <p className="text-red-600">{errors.email.message}</p>
               )}
             </div>
             <div>
-              <label
-                htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Your password
-              </label>
-              <input
+              <Input
+                label="Your password"
+                placeholder="Inter your password here"
+                mandatory
                 type="password"
                 id="password"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
-                {...register("password", { required: "Password is required" })}
+                hookForm={{
+                  ...register("password", { required: "Password is required" }),
+                }}
               />
               {errors.password && (
                 <p className="text-red-600">{errors.password.message}</p>

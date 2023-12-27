@@ -8,6 +8,7 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   size?: "small" | "medium" | "large";
   error?: boolean;
   success?: boolean;
+  hookForm?: any;
 }
 
 const Textarea: React.FC<TextareaProps> = ({
@@ -20,6 +21,7 @@ const Textarea: React.FC<TextareaProps> = ({
   size,
   error,
   success,
+  hookForm,
   ...props
 }) => {
   const padding =
@@ -50,6 +52,7 @@ const Textarea: React.FC<TextareaProps> = ({
         className={styles.join(" ")}
         cols={cols}
         rows={rows}
+        {...hookForm}
         {...props}
       />
       {supportText && (

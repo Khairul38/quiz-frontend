@@ -30,7 +30,7 @@ const UpdateQuizPage = ({ params }: IPageProps) => {
           Update Quiz ✨
         </h1>
       </div>
-      <div className="">
+      <div>
         <CreateQuestion
           quizData={quizData?.data}
           categoryOption={data?.data.map((cd: any) => ({

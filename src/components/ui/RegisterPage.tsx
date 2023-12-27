@@ -7,10 +7,18 @@ import { useEffect } from "react";
 import { notify } from "../common/Toastify";
 import { useRouter } from "next/navigation";
 import Button from "../common/Button";
+import Select from "../common/Select";
+import Input from "../common/Input";
+
+enum RoleEnum {
+  Performer = "performer",
+  Admin = "admin",
+}
 
 interface SignupFormInputs {
   name: string;
   email: string;
+  role: RoleEnum;
   password: string;
   confirmPassword: string;
 }
@@ -33,6 +41,7 @@ const RegisterPage = () => {
       signup({
         name: data.name,
         email: data.email,
+        role: data.role,
         password: data.password,
       });
     }
@@ -64,79 +73,92 @@ const RegisterPage = () => {
               Enter your info to create your account
             </p>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-4 text-gray-900 dark:text-white"
+          >
             <div>
-              <label
-                htmlFor="name"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Your name
-              </label>
-              <input
+              <Input
+                label="Your name"
+                placeholder="Inter your name here"
+                mandatory
                 type="text"
                 id="name"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
-                {...register("name", {
-                  required: "Name is required",
-                })}
+                hookForm={{
+                  ...register("name", {
+                    required: "Name is required",
+                  }),
+                }}
               />
               {errors.name && (
                 <p className="text-red-600">{errors.name.message}</p>
               )}
             </div>
+
             <div>
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Your email
-              </label>
-              <input
+              <Input
+                label="Your email"
+                placeholder="Inter your email here"
+                mandatory
                 type="email"
                 id="email"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="name@gmail.com"
-                required
-                {...register("email", { required: "Email is required" })}
+                hookForm={{
+                  ...register("email", { required: "Email is required" }),
+                }}
               />
               {errors.email && (
                 <p className="text-red-600">{errors.email.message}</p>
               )}
             </div>
             <div>
-              <label
-                htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Your password
-              </label>
-              <input
+              <Select
+                placeholder="Select Role"
+                defaultBlank
+                label="Your role"
+                mandatory
+                id="role"
+                options={[
+                  { text: "Performer", value: "performer" },
+                  { text: "Admin", value: "admin" },
+                ]}
+                hookForm={{
+                  ...register("role", { required: "Role is required" }),
+                }}
+              />
+              {errors.role && (
+                <p className="text-red-600">{errors.role.message}</p>
+              )}
+            </div>
+            <div>
+              <Input
+                label="Your password"
+                placeholder="Inter your password here"
+                mandatory
                 type="password"
                 id="password"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
-                {...register("password", { required: "Password is required" })}
+                hookForm={{
+                  ...register("password", { required: "Password is required" }),
+                }}
               />
               {errors.password && (
                 <p className="text-red-600">{errors.password.message}</p>
               )}
             </div>
             <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Your confirm password
-              </label>
-              <input
+              <Input
+                label="Your confirm password"
+                placeholder="Inter your confirm password here"
+                mandatory
                 type="password"
                 id="confirmPassword"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
-                {...register("confirmPassword", {
-                  required: "Confirm password is required",
-                })}
+                hookForm={{
+                  ...register("confirmPassword", {
+                    required: "Confirm password is required",
+                  }),
+                }}
               />
               {errors.confirmPassword && (
                 <p className="text-red-600">{errors.confirmPassword.message}</p>
@@ -153,15 +175,8 @@ const RegisterPage = () => {
                 </Link>
               </p>
             </div>
-            <Button
-              type="submit"
-              className="w-full px-5 py-2.5"
-            >
-              {isLoading ? (
-                <Loader color="text-white" />
-              ) : (
-                "Register"
-              )}
+            <Button type="submit" className="w-full px-5 py-2.5">
+              {isLoading ? <Loader color="text-white" /> : "Register"}
             </Button>
           </form>
         </div>

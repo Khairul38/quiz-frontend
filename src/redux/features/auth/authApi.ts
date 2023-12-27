@@ -43,7 +43,27 @@ export const authApi = apiSlice.injectEndpoints({
         } catch (error) {}
       },
     }),
+    refreshToken: builder.mutation({
+      query: (data) => ({
+        url: "/auth/refresh-token",
+        method: "POST",
+      }),
+      // invalidatesTags: [],
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          localStorage.setItem(
+            "auth",
+            JSON.stringify({
+              accessToken: result.data.data.accessToken,
+            })
+          );
+          dispatch(userLoggedIn(result.data.data.accessToken));
+        } catch (error) {}
+      },
+    }),
   }),
 });
 
-export const { useSignupMutation, useLoginMutation } = authApi;
+export const { useSignupMutation, useLoginMutation, useRefreshTokenMutation } =
+  authApi;
