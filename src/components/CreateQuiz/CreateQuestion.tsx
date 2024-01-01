@@ -6,7 +6,6 @@ import Textarea from "../common/Textarea";
 import { check } from "@/utils/check";
 import Select from "../common/Select";
 import Input from "../common/Input";
-import { useGetCategoriesQuery } from "@/redux/features/category/categoryApi";
 import {
   useCreateQuizMutation,
   useUpdateQuizMutation,

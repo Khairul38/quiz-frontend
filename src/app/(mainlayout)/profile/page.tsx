@@ -27,7 +27,7 @@ const ProfilePage = () => {
     <div>
       <div>
         {/* Profile background */}
-        <div className="relative h-56 bg-slate-200">
+        <div className="relative h-60 bg-slate-200">
           <Image
             className="object-cover h-full w-full"
             src={ProfileBg.src}
@@ -39,7 +39,7 @@ const ProfilePage = () => {
         </div>
 
         {/* Content */}
-        <div className="relative px-4 sm:px-6 pb-8">
+        <div className="relative px-8 mx-auto max-w-screen-2xl pb-8">
           {/* Pre-header */}
           <div className="-mt-16 mb-6 sm:mb-3">
             <div className="flex flex-col items-center sm:flex-row sm:justify-between sm:items-end">
