@@ -40,7 +40,6 @@ const OptionalQuestion = (props) => {
 
   // @ts-ignore
   const isDisable = (answer) => {
-    
     const got =
       // @ts-ignore
       selectedAnswer.find((ob) => ob.id === answer.id) === undefined &&
@@ -67,7 +66,13 @@ const OptionalQuestion = (props) => {
           <p className="text-center font-semibold text-blue-600 dark:text-blue-500 mb-2">{`Question-> ${
             props.questionNumber + 1
           } / ${props.totalQuestion}`}</p>
-          <p className="text-lg font-semibold">{props.inside.question}</p>
+          <p className="text-lg font-semibold">
+            {props.inside.question}{" "}
+            <span className="text-blue-600 dark:text-blue-500 text-base">
+              {props.inside.multiChoice === true &&
+                "(The answer can be multiple)"}
+            </span>
+          </p>
         </div>
       ) : (
         <div className="p-[10px] m-3 box-border shadow-[0px_3px_8px_rgba(0,0,0,0.24)] rounded">

@@ -109,7 +109,7 @@ const CourseQuiz = ({ data1, categoryId }) => {
   const [submitQuiz, setSubmitQuiz] = useState(false);
   const router = useRouter();
 
-  // console.log(score, submitQuiz);
+  console.log(selectedAnswer, questionSection);
 
   const calculateScore = (): Promise<ScoreResult> => {
     return new Promise<ScoreResult>((resolve) => {
@@ -117,12 +117,15 @@ const CourseQuiz = ({ data1, categoryId }) => {
 
       // @ts-ignore
       questionSection.questions.forEach((q) => {
-        if (
-          selectedAnswer.find(
-            // @ts-ignore
-            (a) => a.questionId === q.id && a.istrue === false
-          ) === undefined
-        ) {
+        const correctAnswers = q.quizAnswers.filter(
+          (qa: any) => qa.istrue === true
+        );
+        const selectedAnswers = selectedAnswer.filter(
+          (a: any) => a.questionId === q.id && a.istrue === true
+        );
+
+        // Check if all correct answers are selected
+        if (correctAnswers.length === selectedAnswers.length) {
           result.amount += q.mark;
           setScore((prev) => ({ ...prev, amount: prev.amount + q.mark }));
         }
