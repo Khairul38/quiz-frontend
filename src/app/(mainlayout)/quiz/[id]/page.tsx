@@ -33,7 +33,7 @@ const QuizPage = ({ params }: IPageProps) => {
   }
 
   return (
-    <div className="pt-28 pb-16 px-8 mx-auto max-w-screen-2xl min-h-[80vh]">
+    <div className="pt-28 pb-16 px-8 mx-auto max-w-screen-2xl h-full">
       <Quiz
         data1={{
           ...data,

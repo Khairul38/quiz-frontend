@@ -411,7 +411,7 @@ const CourseQuiz = ({ data1, categoryId }) => {
               )}
             </div>
 
-            <div className="lg:basis-3/12 flex flex-col justify-between lg:max-h-[85vh] sticky top-16 space-y-5 lg:ml-4">
+            <div className="lg:basis-3/12 flex flex-col justify-between sticky top-16 space-y-5 lg:ml-5">
               <div>
                 <div className="bg-slate-100 shadow rounded border border-slate-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">
                   <Timer timeInMinute={15} />
