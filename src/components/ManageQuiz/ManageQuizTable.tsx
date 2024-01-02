@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useDeleteQuizMutation } from "@/redux/features/quiz/quizApi";
 import { notify } from "../common/Toastify";
 
-const ManageQuizTable = ({ quiz }: { quiz: any }) => {
+const ManageQuizTable = ({ quiz, index }: { quiz: any; index: number }) => {
   const router = useRouter();
   // console.log(quiz);
   const [deleteQuiz, { isSuccess, isLoading: deleteLoad, error }] =
@@ -32,7 +32,10 @@ const ManageQuizTable = ({ quiz }: { quiz: any }) => {
                   </div>
                 </TableCell> */}
       <TableCell>
-        <span className="ml-5 font-medium">{quiz.question}</span>
+        <span className="ml-5 font-medium">
+          {`${index + 1}. `}
+          {quiz.question}
+        </span>
       </TableCell>
       <TableCell>
         {/* <ToggleSwitch

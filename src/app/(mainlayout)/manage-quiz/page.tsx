@@ -169,8 +169,8 @@ const ManageQuizPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {leaderBoardData?.data?.map((quiz: any) => (
-              <ManageQuizTable key={quiz.id} quiz={quiz} />
+            {leaderBoardData?.data?.map((quiz: any, index: number) => (
+              <ManageQuizTable key={quiz.id} quiz={quiz} index={index} />
             ))}
           </TableBody>
         </Table>
