@@ -109,7 +109,7 @@ const CourseQuiz = ({ data1, categoryId }) => {
   const [submitQuiz, setSubmitQuiz] = useState(false);
   const router = useRouter();
 
-  console.log(selectedAnswer, questionSection);
+  // console.log(selectedAnswer, questionSection);
 
   const calculateScore = (): Promise<ScoreResult> => {
     return new Promise<ScoreResult>((resolve) => {
