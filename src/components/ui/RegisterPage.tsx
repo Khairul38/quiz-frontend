@@ -80,7 +80,7 @@ const RegisterPage = () => {
             <div>
               <Input
                 label="Your name"
-                placeholder="Inter your name here"
+                placeholder="Enter your name here"
                 mandatory
                 type="text"
                 id="name"
@@ -99,7 +99,7 @@ const RegisterPage = () => {
             <div>
               <Input
                 label="Your email"
-                placeholder="Inter your email here"
+                placeholder="Enter your email here"
                 mandatory
                 type="email"
                 id="email"
@@ -133,7 +133,7 @@ const RegisterPage = () => {
             <div>
               <Input
                 label="Your password"
-                placeholder="Inter your password here"
+                placeholder="Enter your password here"
                 mandatory
                 type="password"
                 id="password"
@@ -149,7 +149,7 @@ const RegisterPage = () => {
             <div>
               <Input
                 label="Your confirm password"
-                placeholder="Inter your confirm password here"
+                placeholder="Enter your confirm password here"
                 mandatory
                 type="password"
                 id="confirmPassword"

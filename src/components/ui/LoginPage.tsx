@@ -64,7 +64,7 @@ const LoginPage = () => {
                 mandatory
                 type="email"
                 id="email"
-                placeholder="Inter your email here"
+                placeholder="Enter your email here"
                 required
                 hookForm={{
                   ...register("email", { required: "Email is required" }),
@@ -77,7 +77,7 @@ const LoginPage = () => {
             <div>
               <Input
                 label="Your password"
-                placeholder="Inter your password here"
+                placeholder="Enter your password here"
                 mandatory
                 type="password"
                 id="password"
